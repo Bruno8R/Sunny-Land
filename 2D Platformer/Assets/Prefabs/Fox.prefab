@@ -46,6 +46,7 @@ GameObject:
   - component: {fileID: 606616810725081212}
   - component: {fileID: 285278876}
   - component: {fileID: 1142205597}
+  - component: {fileID: 1142205604}
   m_Layer: 0
   m_Name: Fox
   m_TagString: Untagged
@@ -191,7 +192,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Actions: {fileID: -944628639613478452, guid: cff112e1529475643ba0f0a598c9ea0c, type: 3}
-  m_NotificationBehavior: 2
+  m_NotificationBehavior: 0
   m_UIInputModule: {fileID: 0}
   m_DeviceLostEvent:
     m_PersistentCalls:
@@ -346,3 +347,17 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.96610487, y: 1.1227369}
   m_EdgeRadius: 0
+--- !u!114 &1142205604
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 606616810725081207}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f2bcaabd474ccdd4fbb2a8154e1a4e1a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  walkSpeed: 500
+  jumpForce: 5
