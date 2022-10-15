@@ -130,21 +130,9 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 606616810725081201, guid: a443af19a4bfe2a4992357a57b95890d, type: 3}
-      propertyPath: m_Size.x
-      value: 1.074105
-      objectReference: {fileID: 0}
-    - target: {fileID: 606616810725081201, guid: a443af19a4bfe2a4992357a57b95890d, type: 3}
-      propertyPath: m_Size.y
-      value: 1.4701719
-      objectReference: {fileID: 0}
-    - target: {fileID: 606616810725081201, guid: a443af19a4bfe2a4992357a57b95890d, type: 3}
-      propertyPath: m_Offset.x
-      value: -0.085487485
-      objectReference: {fileID: 0}
-    - target: {fileID: 606616810725081201, guid: a443af19a4bfe2a4992357a57b95890d, type: 3}
-      propertyPath: m_Offset.y
-      value: -0.29616404
+    - target: {fileID: 285278876, guid: a443af19a4bfe2a4992357a57b95890d, type: 3}
+      propertyPath: m_NotificationBehavior
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 606616810725081203, guid: a443af19a4bfe2a4992357a57b95890d, type: 3}
       propertyPath: m_RootOrder
@@ -152,11 +140,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 606616810725081203, guid: a443af19a4bfe2a4992357a57b95890d, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.19
+      value: -0.86
       objectReference: {fileID: 0}
     - target: {fileID: 606616810725081203, guid: a443af19a4bfe2a4992357a57b95890d, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 10.45
+      value: 1.3
       objectReference: {fileID: 0}
     - target: {fileID: 606616810725081203, guid: a443af19a4bfe2a4992357a57b95890d, type: 3}
       propertyPath: m_LocalPosition.z
@@ -319,32 +307,20 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 606616810725081207, guid: a443af19a4bfe2a4992357a57b95890d, type: 3}
   m_PrefabInstance: {fileID: 147768208}
   m_PrefabAsset: {fileID: 0}
---- !u!61 &1142205597
-BoxCollider2D:
+--- !u!114 &1142205604
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1142205589}
-  m_Enabled: 0
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: -0.09754747, y: -0.17009783}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 2.0625, y: 2}
-    newSize: {x: 2.0625, y: 2}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 0.96610487, y: 1.1227369}
-  m_EdgeRadius: 0
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f2bcaabd474ccdd4fbb2a8154e1a4e1a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  walkSpeed: 500
+  jumpForce: 5
 --- !u!1 &1372789398
 GameObject:
   m_ObjectHideFlags: 0
