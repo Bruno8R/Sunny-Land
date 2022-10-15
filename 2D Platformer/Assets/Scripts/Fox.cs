@@ -35,7 +35,6 @@ public class Fox : MonoBehaviour
         MovePlayer();
         FlipSprite();
 
-
     }
 
     void OnMove(InputValue value)
@@ -47,9 +46,10 @@ public class Fox : MonoBehaviour
     {
         float moveSpeed = walkSpeed;
         if (isRunning){moveSpeed = runSpeed;}
-        
+
         Vector2 playerVelocity = new Vector2(moveInput.x * moveSpeed * Time.fixedDeltaTime * 100, myRigidbody.velocity.y);
         myRigidbody.velocity = playerVelocity;
+        myAnimator.SetFloat("xVelocity", Mathf.Abs(myRigidbody.velocity.x));
     }
 
     void FlipSprite()

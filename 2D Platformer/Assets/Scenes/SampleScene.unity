@@ -130,9 +130,17 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 285278876, guid: a443af19a4bfe2a4992357a57b95890d, type: 3}
-      propertyPath: m_NotificationBehavior
-      value: 0
+    - target: {fileID: 1142205604, guid: a443af19a4bfe2a4992357a57b95890d, type: 3}
+      propertyPath: runSpeed
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 1142205604, guid: a443af19a4bfe2a4992357a57b95890d, type: 3}
+      propertyPath: moveSpeed
+      value: 500
+      objectReference: {fileID: 0}
+    - target: {fileID: 1142205604, guid: a443af19a4bfe2a4992357a57b95890d, type: 3}
+      propertyPath: walkSpeed
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 606616810725081203, guid: a443af19a4bfe2a4992357a57b95890d, type: 3}
       propertyPath: m_RootOrder
@@ -302,25 +310,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1142205589 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 606616810725081207, guid: a443af19a4bfe2a4992357a57b95890d, type: 3}
-  m_PrefabInstance: {fileID: 147768208}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1142205604
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1142205589}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f2bcaabd474ccdd4fbb2a8154e1a4e1a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  walkSpeed: 500
-  jumpForce: 5
 --- !u!1 &1372789398
 GameObject:
   m_ObjectHideFlags: 0
