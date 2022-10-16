@@ -21,17 +21,17 @@ public class Fox : MonoBehaviour
     Vector2 moveInput;
     Animator myAnimator;
 
-    Collider2D standingCollider;
+    CapsuleCollider2D standingCollider;
 
     [SerializeField] Transform groundCheckCollider; //  to assign in the inspector the the object witch will check for collision
     [SerializeField] LayerMask groundLayer; // to assign in the inspector the "Ground" Layer
     const float groundCheckRadius = 0.2f; // set the radius the with the ground collision will check
     
-
     void Start()
     {
         myRigidbody = GetComponent<Rigidbody2D>();
         myAnimator = GetComponent<Animator>();
+        standingCollider = GetComponent<CapsuleCollider2D>();
     }
 
     void Update()
@@ -46,24 +46,17 @@ public class Fox : MonoBehaviour
         GroundCheck();
     }
 
-    void StopPlayer()
-    {
-        myRigidbody.velocity = new Vector2(0f, 0f);
-    }
-
     void Movement()
     {
         myAnimator.SetFloat("xVelocity", Mathf.Abs(myRigidbody.velocity.x));
         myAnimator.SetFloat("yVelocity", myRigidbody.velocity.y);
 
         #region Walk & Run
-        
         float moveSpeed = walkSpeed;
         if (isRunning){moveSpeed = runSpeed;}
 
         Vector2 playerVelocity = new Vector2(moveInput.x * moveSpeed * Time.fixedDeltaTime * 100, myRigidbody.velocity.y);
-        myRigidbody.velocity = playerVelocity;
-            
+        myRigidbody.velocity = playerVelocity;     
         #endregion
 
         #region Crouch & Jump
@@ -81,11 +74,9 @@ public class Fox : MonoBehaviour
 
             // if we presse Crouch we disable the standing collider
             #region Crouch
-            if (isCrouching){
-                myAnimator.SetBool("Crouch", true);
-                StopPlayer();
-            }
-            else myAnimator.SetBool("Crouch", false);
+            standingCollider.enabled = !isCrouching;
+            myAnimator.SetBool("Crouch", isCrouching);
+            StopPlayer(isCrouching);
             #endregion
         }
         #endregion
@@ -103,7 +94,7 @@ public class Fox : MonoBehaviour
             facingRigth = true;
         }
     }
-    
+
     void GroundCheck()
     {
         isGrounded = false;// disable the flag before it checks
@@ -117,6 +108,11 @@ public class Fox : MonoBehaviour
 
         // as long as we are grounder the "isJumping" bool in the animator is disabled
         myAnimator.SetBool("Jump", !isGrounded);
+    }
+
+    void StopPlayer(bool value)
+    {
+        if (value){myRigidbody.velocity = new Vector2(0f, 0f);}
     }
 
     void OnMove(InputValue value)
