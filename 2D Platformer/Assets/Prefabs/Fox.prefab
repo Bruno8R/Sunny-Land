@@ -24,7 +24,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 606616810723024299}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.136, y: -1.045, z: 0}
+  m_LocalPosition: {x: -0.142, y: -1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -129,9 +129,9 @@ CapsuleCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 606616810725081207}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 19431e9b7f8ad0743bb81b40338d430f, type: 2}
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
@@ -359,5 +359,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f2bcaabd474ccdd4fbb2a8154e1a4e1a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  walkSpeed: 500
-  jumpForce: 5
+  runSpeed: 10
+  walkSpeed: 5
+  jumpForce: 20
+  isGrounded: 0
+  isJumping: 0
+  isRunning: 0
+  isCrouching: 0
+  facingRigth: 1
+  groundCheckCollider: {fileID: 606616810723024276}
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 64
