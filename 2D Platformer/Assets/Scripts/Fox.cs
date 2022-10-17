@@ -18,8 +18,8 @@ public class Fox : MonoBehaviour
     [SerializeField] bool isJumping = false;
     [SerializeField] bool isRunning = false;
     [SerializeField] bool isCrouching = false;
-
     [SerializeField] bool facingRigth = true;
+    [SerializeField] bool coyoteJump = false;
 
     Rigidbody2D myRigidbody;
     Vector2 moveInput;
@@ -48,7 +48,6 @@ public class Fox : MonoBehaviour
 
     void Update()
     {
-        
         GroundCheck();
     }
 
@@ -104,6 +103,11 @@ public class Fox : MonoBehaviour
                 isJumping = false;
             }
         }
+        else if (wasGrounded)
+        {
+            StartCoroutine(CoyoteJump());
+        }
+
 
         // as long as we are grounder the "isJumping" bool in the animator is disabled
         myAnimator.SetBool("Jump", !isGrounded);
@@ -122,6 +126,14 @@ public class Fox : MonoBehaviour
                 myAnimator.SetBool("Jump", true);
                 isJumping = false;
             }
+            if(coyoteJump)
+            {
+                multipleJumps = true; // only allow multiple jumps with we made the first jump
+                    
+                myRigidbody.velocity = Vector2.up * jumpForce;
+                myAnimator.SetBool("Jump", true);
+                isJumping = false;
+            }
             else if (multipleJumps && avaibleJumps > 0)
             {
                 avaibleJumps--;
@@ -129,7 +141,15 @@ public class Fox : MonoBehaviour
                 myAnimator.SetBool("Jump", true);
                 isJumping = false;
             }
+            
         }
+    }
+
+    IEnumerator CoyoteJump()
+    {
+        coyoteJump = true;
+        yield return new WaitForSeconds(0.2f);
+        coyoteJump = false;
     }
 
     void FlipSprite()
