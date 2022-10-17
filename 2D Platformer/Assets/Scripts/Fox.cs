@@ -126,7 +126,7 @@ public class Fox : MonoBehaviour
                 myAnimator.SetBool("Jump", true);
                 isJumping = false;
             }
-            if(coyoteJump)
+            else if(coyoteJump)
             {
                 multipleJumps = true; // only allow multiple jumps with we made the first jump
                     
