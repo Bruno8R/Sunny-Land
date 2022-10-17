@@ -10,6 +10,10 @@ public class Fox : MonoBehaviour
     [SerializeField] float walkSpeed = 5f;
     [SerializeField] float jumpForce = 5f;
 
+    [SerializeField] int totalJumps;
+    [SerializeField] int avaibleJumps = 2;
+    [SerializeField] bool multipleJumps = true;
+
     [SerializeField] bool isGrounded = false;
     [SerializeField] bool isJumping = false;
     [SerializeField] bool isRunning = false;
@@ -24,9 +28,17 @@ public class Fox : MonoBehaviour
     CapsuleCollider2D standingCollider;
 
     [SerializeField] Transform groundCheckCollider; //  to assign in the inspector the the object witch will check for collision
+    [SerializeField] Transform overheadCheckCollider;
     [SerializeField] LayerMask groundLayer; // to assign in the inspector the "Ground" Layer
     const float groundCheckRadius = 0.2f; // set the radius the with the ground collision will check
+    const float overheadCheckRadius = 0.2f;
     
+
+    void Awake() 
+    {
+        avaibleJumps = totalJumps;
+    }
+
     void Start()
     {
         myRigidbody = GetComponent<Rigidbody2D>();
@@ -37,49 +49,87 @@ public class Fox : MonoBehaviour
     void Update()
     {
         
+        GroundCheck();
     }
 
     void FixedUpdate()
     {
         Movement();
+        Jump();
+        Crouching();
         FlipSprite();
-        GroundCheck();
     }
 
     void Movement()
     {
         myAnimator.SetFloat("xVelocity", Mathf.Abs(myRigidbody.velocity.x));
-        myAnimator.SetFloat("yVelocity", myRigidbody.velocity.y);
-
-        #region Walk & Run
         float moveSpeed = walkSpeed;
         if (isRunning){moveSpeed = runSpeed;}
 
         Vector2 playerVelocity = new Vector2(moveInput.x * moveSpeed * Time.fixedDeltaTime * 100, myRigidbody.velocity.y);
         myRigidbody.velocity = playerVelocity;     
-        #endregion
+    }
 
-        #region Crouch & Jump
+    void Crouching()
+    {
         if(isGrounded){
-            #region Jump
-            if (isJumping)
+/*          if (!isCrouching)
             {
-                myRigidbody.velocity += new Vector2(0f, jumpForce);
+                if(Physics2D.OverlapCircle(overheadCheckCollider.position, overheadCheckRadius, groundLayer))
+                    isCrouching = true;
+            }  */
+            
+            standingCollider.enabled = !isCrouching;
+            StopPlayer(isCrouching);
+            myAnimator.SetBool("Crouch", isCrouching);
+        }
+    }
+
+    void GroundCheck()
+    {
+        bool wasGrounded = isGrounded;
+        isGrounded = false;// disable the flag before it checks
+        
+        // get an array with all the colliders that are overlapping with the GroundCheck object in the 
+        // ground/platform that are in the "Ground" Layer in the set radius
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(groundCheckCollider.position, groundCheckRadius, groundLayer);
+        
+        // if the length of the array is > 0 there is collision
+        if (colliders.Length > 0){ // grounded
+            isGrounded = true;
+            if (!wasGrounded)
+            {
+                avaibleJumps = totalJumps;
+                multipleJumps = false;
+                isJumping = false;
+            }
+        }
+
+        // as long as we are grounder the "isJumping" bool in the animator is disabled
+        myAnimator.SetBool("Jump", !isGrounded);
+    }
+
+    void Jump()
+    {
+        myAnimator.SetFloat("yVelocity", myRigidbody.velocity.y);
+        if(isJumping){
+            if(isGrounded)
+            {
+                multipleJumps = true; // only allow multiple jumps with we made the first jump
+                avaibleJumps--;
+                
+                myRigidbody.velocity = Vector2.up * jumpForce;
                 myAnimator.SetBool("Jump", true);
                 isJumping = false;
             }
-            // set the "yVelocity" parameter in Unity Animator for the Jumping Blend Tree
-            //myAnimator.SetFloat("yVelocity", myRigidbody.velocity.y);
-            #endregion
-
-            // if we presse Crouch we disable the standing collider
-            #region Crouch
-            standingCollider.enabled = !isCrouching;
-            myAnimator.SetBool("Crouch", isCrouching);
-            StopPlayer(isCrouching);
-            #endregion
+            else if (multipleJumps && avaibleJumps > 0)
+            {
+                avaibleJumps--;
+                myRigidbody.velocity = Vector2.up * jumpForce;
+                myAnimator.SetBool("Jump", true);
+                isJumping = false;
+            }
         }
-        #endregion
     }
 
     void FlipSprite()
@@ -95,21 +145,6 @@ public class Fox : MonoBehaviour
         }
     }
 
-    void GroundCheck()
-    {
-        isGrounded = false;// disable the flag before it checks
-        
-        // get an array with all the colliders that are overlapping with the GroundCheck object in the 
-        // ground/platform that are in the "Ground" Layer in the set radius
-        Collider2D[] colliders = Physics2D.OverlapCircleAll(groundCheckCollider.position, groundCheckRadius, groundLayer);
-        
-        // if the length of the array is > 0 there is collision
-        if (colliders.Length > 0){isGrounded = true;} // grounded
-
-        // as long as we are grounder the "isJumping" bool in the animator is disabled
-        myAnimator.SetBool("Jump", !isGrounded);
-    }
-
     void StopPlayer(bool value)
     {
         if (value){myRigidbody.velocity = new Vector2(0f, 0f);}
@@ -122,20 +157,17 @@ public class Fox : MonoBehaviour
 
     // @desc get run input
     void OnRun(InputValue value) {
-        if (value.Get<float>() > 0){isRunning = true;}
-        else {isRunning = false;}
+        isRunning = value.Get<float>() > 0;
     }
 
     void OnCrouch(InputValue value)
     {
-        if (value.Get<float>() > 0){isCrouching = true;}
-        else {isCrouching = false;}
+        isCrouching = value.Get<float>() > 0;
     }
 
     // @desc check if the player is touching the ground:
     void OnJump(InputValue value)
     {
-        if (!isGrounded){return;}
-        if (value.isPressed){isJumping = true;}
+        isJumping = value.isPressed;
     }
 }
