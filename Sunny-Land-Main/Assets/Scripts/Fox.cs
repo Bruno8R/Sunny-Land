@@ -12,15 +12,15 @@ public class Fox : MonoBehaviour
 
     [SerializeField] int totalJumps;
     [SerializeField] int avaibleJumps = 2;
-    [SerializeField] bool multipleJumps = true;
-
-    [SerializeField] bool isGrounded = false;
-    [SerializeField] bool isJumping = false;
-    [SerializeField] bool isRunning = false;
-    [SerializeField] bool isCrouching = false;
-    [SerializeField] bool facingRigth = true;
-    [SerializeField] bool coyoteJump = false;
-    [SerializeField] bool isMoving = false;
+    
+    bool multipleJumps = true;
+    bool isGrounded = false;
+    bool isJumping = false;
+    bool isRunning = false;
+    bool isCrouching = false;
+    bool facingRigth = true;
+    bool coyoteJump = false;
+    public bool isInteracting = false;
 
     Rigidbody2D myRigidbody;
     Vector2 moveInput;
@@ -55,35 +55,23 @@ public class Fox : MonoBehaviour
     void FixedUpdate()
     {
         Movement();
-        Idle();
         Jump();
         Crouching();
         FlipSprite();
     }
 
-    void Idle()
-    {
-        if(Mathf.Abs(myRigidbody.velocity.x) > 0 || Mathf.Abs(myRigidbody.velocity.x) < 0)
-        {
-            isMoving = true;
-            myRigidbody.isKinematic = false;
-        }
-        else
-        {
-            isMoving = false;
-           // myRigidbody.velocity = new Vector2(0f, 0f);
-            myRigidbody.isKinematic = true;
-        }
-    }
-
+    // @desc execute player movement and the respective animation
     void Movement()
     {
-        myAnimator.SetFloat("xVelocity", Mathf.Abs(myRigidbody.velocity.x));
-        float moveSpeed = walkSpeed;
-        if (isRunning){moveSpeed = runSpeed;}
+        float moveSpeed = walkSpeed;// the player is walking by default
+        if (isRunning){moveSpeed = runSpeed;}// check if the player is running, if true change the move speed
 
+        // check if the player has horizontal speed, and if true move the player
         Vector2 playerVelocity = new Vector2(moveInput.x * moveSpeed * Time.fixedDeltaTime * 100, myRigidbody.velocity.y);
         myRigidbody.velocity = playerVelocity;     
+        
+        // Animate the player: get player horizontal velocity for the Animator parameter
+        myAnimator.SetFloat("xVelocity", Mathf.Abs(myRigidbody.velocity.x));
     }
 
     void Crouching()
@@ -101,9 +89,10 @@ public class Fox : MonoBehaviour
         }
     }
 
+    // @desc check if the player is touching the ground... 
     void GroundCheck()
     {
-        bool wasGrounded = isGrounded;
+        bool wasGrounded = isGrounded; 
         isGrounded = false;// disable the flag before it checks
         
         // get an array with all the colliders that are overlapping with the GroundCheck object in the 
@@ -126,7 +115,7 @@ public class Fox : MonoBehaviour
         }
 
 
-        // as long as we are grounder the "isJumping" bool in the animator is disabled
+        // as long as we are grounded the "isJumping" bool in the animator is disabled
         myAnimator.SetBool("Jump", !isGrounded);
     }
 
@@ -146,6 +135,7 @@ public class Fox : MonoBehaviour
             else if(coyoteJump)
             {
                 multipleJumps = true; // only allow multiple jumps with we made the first jump
+                avaibleJumps--;
                     
                 myRigidbody.velocity = Vector2.up * jumpForce;
                 myAnimator.SetBool("Jump", true);
@@ -187,24 +177,31 @@ public class Fox : MonoBehaviour
         if (value){myRigidbody.velocity = new Vector2(0f, 0f);}
     }
 
+    // @desc get the movement input
     void OnMove(InputValue value)
     {
         moveInput = value.Get<Vector2>();
     }
 
-    // @desc get run input
+    // @desc get the run input
     void OnRun(InputValue value) {
         isRunning = value.Get<float>() > 0;
     }
 
+    // @desc get the crouch input
     void OnCrouch(InputValue value)
     {
         isCrouching = value.Get<float>() > 0;
     }
 
-    // @desc check if the player is touching the ground:
+    // @desc get the jump input
     void OnJump(InputValue value)
     {
         isJumping = value.isPressed;
+    }
+
+    void OnInteract(InputValue value)
+    {
+       isInteracting =  value.isPressed;
     }
 }

@@ -24,7 +24,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 606616810723024299}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.142, y: -1, z: 0}
+  m_LocalPosition: {x: -0.142, y: -1.08, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -40,12 +40,13 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 606616810725081203}
+  - component: {fileID: 1142205604}
+  - component: {fileID: 2143659701285513418}
   - component: {fileID: 606616810725081202}
   - component: {fileID: 606616810725081201}
   - component: {fileID: 606616810725081200}
   - component: {fileID: 606616810725081212}
   - component: {fileID: 285278876}
-  - component: {fileID: 1142205604}
   - component: {fileID: 5895613778138190140}
   m_Layer: 0
   m_Name: Fox
@@ -71,6 +72,46 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1142205604
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 606616810725081207}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f2bcaabd474ccdd4fbb2a8154e1a4e1a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  runSpeed: 10
+  walkSpeed: 5
+  jumpForce: 20
+  totalJumps: 2
+  avaibleJumps: 2
+  isInteracting: 0
+  groundCheckCollider: {fileID: 606616810723024276}
+  overheadCheckCollider: {fileID: 4066283282434073417}
+  groundLayer:
+    serializedVersion: 2
+    m_Bits: 64
+--- !u!114 &2143659701285513418
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 606616810725081207}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 152bd382a97a06d48874f1013352ae25, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fox: {fileID: 0}
+  detectionPoint: {fileID: 606616810725081203}
+  detectionLayer:
+    serializedVersion: 2
+    m_Bits: 512
 --- !u!212 &606616810725081202
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -136,8 +177,8 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.085487485, y: -0.29616404}
-  m_Size: {x: 1.074105, y: 1.4701719}
+  m_Offset: {x: -0.085487485, y: -0.2795701}
+  m_Size: {x: 1.074105, y: 1.4369841}
   m_Direction: 0
 --- !u!50 &606616810725081200
 Rigidbody2D:
@@ -152,13 +193,13 @@ Rigidbody2D:
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1
-  m_LinearDrag: 0
-  m_AngularDrag: 0.05
+  m_LinearDrag: 1
+  m_AngularDrag: 0
   m_GravityScale: 5
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 4
 --- !u!95 &606616810725081212
 Animator:
@@ -322,35 +363,6 @@ MonoBehaviour:
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
---- !u!114 &1142205604
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 606616810725081207}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f2bcaabd474ccdd4fbb2a8154e1a4e1a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  runSpeed: 10
-  walkSpeed: 5
-  jumpForce: 20
-  totalJumps: 0
-  avaibleJumps: 2
-  multipleJumps: 1
-  isGrounded: 0
-  isJumping: 0
-  isRunning: 0
-  isCrouching: 0
-  facingRigth: 1
-  coyoteJump: 0
-  groundCheckCollider: {fileID: 606616810723024276}
-  overheadCheckCollider: {fileID: 4066283282434073417}
-  groundLayer:
-    serializedVersion: 2
-    m_Bits: 64
 --- !u!58 &5895613778138190140
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -364,9 +376,9 @@ CircleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: -0.59397376}
+  m_Offset: {x: 0, y: -0.5680206}
   serializedVersion: 2
-  m_Radius: 0.43727624
+  m_Radius: 0.41132307
 --- !u!1 &1130075050709056087
 GameObject:
   m_ObjectHideFlags: 0
