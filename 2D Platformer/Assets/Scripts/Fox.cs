@@ -20,6 +20,7 @@ public class Fox : MonoBehaviour
     [SerializeField] bool isCrouching = false;
     [SerializeField] bool facingRigth = true;
     [SerializeField] bool coyoteJump = false;
+    [SerializeField] bool isMoving = false;
 
     Rigidbody2D myRigidbody;
     Vector2 moveInput;
@@ -54,9 +55,25 @@ public class Fox : MonoBehaviour
     void FixedUpdate()
     {
         Movement();
+        Idle();
         Jump();
         Crouching();
         FlipSprite();
+    }
+
+    void Idle()
+    {
+        if(Mathf.Abs(myRigidbody.velocity.x) > 0 || Mathf.Abs(myRigidbody.velocity.x) < 0)
+        {
+            isMoving = true;
+            myRigidbody.isKinematic = false;
+        }
+        else
+        {
+            isMoving = false;
+           // myRigidbody.velocity = new Vector2(0f, 0f);
+            myRigidbody.isKinematic = true;
+        }
     }
 
     void Movement()

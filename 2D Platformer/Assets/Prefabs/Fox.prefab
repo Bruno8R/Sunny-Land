@@ -337,12 +337,15 @@ MonoBehaviour:
   runSpeed: 10
   walkSpeed: 5
   jumpForce: 20
+  totalJumps: 0
+  avaibleJumps: 2
+  multipleJumps: 1
   isGrounded: 0
   isJumping: 0
   isRunning: 0
   isCrouching: 0
-  isStoped: 0
   facingRigth: 1
+  coyoteJump: 0
   groundCheckCollider: {fileID: 606616810723024276}
   overheadCheckCollider: {fileID: 4066283282434073417}
   groundLayer:
