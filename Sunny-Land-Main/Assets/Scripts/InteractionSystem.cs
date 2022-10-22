@@ -8,7 +8,6 @@ using UnityEngine.InputSystem;
 public class InteractionSystem : MonoBehaviour
 {
 
-    private Fox fox;
     
     public Transform detectionPoint; //DetectionPoint
     private const float detectionRadius = 0.2f; //DetectionRadius
@@ -18,13 +17,7 @@ public class InteractionSystem : MonoBehaviour
 
     void Update()
     {
-        if(DetectObject())
-        {
-            if(fox.isInteracting)
-            {
-                Debug.Log("INTERACTING");
-            }
-        }
+
     }
 
    // bool InteractInput()
@@ -34,5 +27,16 @@ public class InteractionSystem : MonoBehaviour
         return Physics2D.OverlapCircle(detectionPoint.position, detectionRadius, detectionLayer);
    }
 
+    // @desc get the interact input
+    void OnInteract(InputValue value)
+    {
+        if(DetectObject())
+        {
+            if(value.isPressed)
+            {
+                Debug.Log("INTERACTING");
+            }
+        }
+    }
 
 }

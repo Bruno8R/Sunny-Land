@@ -5,17 +5,16 @@ using UnityEngine.InputSystem;
 
 public class Fox : MonoBehaviour
 {
-    //[SerializeField] 
+
     [SerializeField] float runSpeed = 10f;
     [SerializeField] float walkSpeed = 5f;
     [SerializeField] float jumpForce = 5f;
-
+    [SerializeField] float coyoteJumpTime = 0.2f;
     [SerializeField] int totalJumps;
     [SerializeField] int avaibleJumps = 2;
     
     bool multipleJumps = true;
     bool isGrounded = false;
-    bool isJumping = false;
     bool isRunning = false;
     bool isCrouching = false;
     bool facingRigth = true;
@@ -25,16 +24,14 @@ public class Fox : MonoBehaviour
     Rigidbody2D myRigidbody;
     Vector2 moveInput;
     Animator myAnimator;
-
     CapsuleCollider2D standingCollider;
 
     [SerializeField] Transform groundCheckCollider; //  to assign in the inspector the the object witch will check for collision
-    [SerializeField] Transform overheadCheckCollider;
+    [SerializeField] Transform overheadCheckCollider; 
     [SerializeField] LayerMask groundLayer; // to assign in the inspector the "Ground" Layer
     const float groundCheckRadius = 0.2f; // set the radius the with the ground collision will check
     const float overheadCheckRadius = 0.2f;
     
-
     void Awake() 
     {
         avaibleJumps = totalJumps;
@@ -54,39 +51,22 @@ public class Fox : MonoBehaviour
 
     void FixedUpdate()
     {
-        Movement();
-        Jump();
-        Crouching();
         FlipSprite();
+        StopPlayer();
+        Movement();
+        myAnimator.SetFloat("yVelocity", myRigidbody.velocity.y);
     }
 
-    // @desc execute player movement and the respective animation
-    void Movement()
-    {
+    void Movement(){
         float moveSpeed = walkSpeed;// the player is walking by default
         if (isRunning){moveSpeed = runSpeed;}// check if the player is running, if true change the move speed
 
         // check if the player has horizontal speed, and if true move the player
         Vector2 playerVelocity = new Vector2(moveInput.x * moveSpeed * Time.fixedDeltaTime * 100, myRigidbody.velocity.y);
         myRigidbody.velocity = playerVelocity;     
-        
+
         // Animate the player: get player horizontal velocity for the Animator parameter
         myAnimator.SetFloat("xVelocity", Mathf.Abs(myRigidbody.velocity.x));
-    }
-
-    void Crouching()
-    {
-        if(isGrounded){
-/*          if (!isCrouching)
-            {
-                if(Physics2D.OverlapCircle(overheadCheckCollider.position, overheadCheckRadius, groundLayer))
-                    isCrouching = true;
-            }  */
-            
-            standingCollider.enabled = !isCrouching;
-            StopPlayer(isCrouching);
-            myAnimator.SetBool("Crouch", isCrouching);
-        }
     }
 
     // @desc check if the player is touching the ground... 
@@ -99,109 +79,101 @@ public class Fox : MonoBehaviour
         // ground/platform that are in the "Ground" Layer in the set radius
         Collider2D[] colliders = Physics2D.OverlapCircleAll(groundCheckCollider.position, groundCheckRadius, groundLayer);
         
-        // if the length of the array is > 0 there is collision
-        if (colliders.Length > 0){ // grounded
+        // if the length of the array is > 0 there is collision so the player is on the ground
+        if (colliders.Length > 0){ 
             isGrounded = true;
             if (!wasGrounded)
             {
                 avaibleJumps = totalJumps;
                 multipleJumps = false;
-                isJumping = false;
             }
         }
-        else if (wasGrounded)
+        else if (wasGrounded) // 
         {
             StartCoroutine(CoyoteJump());
         }
-
 
         // as long as we are grounded the "isJumping" bool in the animator is disabled
         myAnimator.SetBool("Jump", !isGrounded);
     }
 
-    void Jump()
-    {
-        myAnimator.SetFloat("yVelocity", myRigidbody.velocity.y);
-        if(isJumping){
-            if(isGrounded)
-            {
-                multipleJumps = true; // only allow multiple jumps with we made the first jump
-                avaibleJumps--;
-                
-                myRigidbody.velocity = Vector2.up * jumpForce;
-                myAnimator.SetBool("Jump", true);
-                isJumping = false;
-            }
-            else if(coyoteJump)
-            {
-                multipleJumps = true; // only allow multiple jumps with we made the first jump
-                avaibleJumps--;
-                    
-                myRigidbody.velocity = Vector2.up * jumpForce;
-                myAnimator.SetBool("Jump", true);
-                isJumping = false;
-            }
-            else if (multipleJumps && avaibleJumps > 0)
-            {
-                avaibleJumps--;
-                myRigidbody.velocity = Vector2.up * jumpForce;
-                myAnimator.SetBool("Jump", true);
-                isJumping = false;
-            }
-            
-        }
-    }
-
+    // @desc coroutine to set the time of the "coyote jump" effect
     IEnumerator CoyoteJump()
     {
         coyoteJump = true;
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(coyoteJumpTime);
         coyoteJump = false;
     }
 
+    // @desc flip the sprite direction
     void FlipSprite()
     {
+        // if the sprite is facing right and the move input is to the left flip the sprite to the left
         if (facingRigth && moveInput.x < 0)
         {
             transform.localScale = new Vector3 (-1, 1, 1);
-            facingRigth = false;
+            facingRigth = false; 
         }
+        // if the sprite is not facing right and the move input is to the rigth flip the sprite to the rigth
         else if(!facingRigth && moveInput.x > 0){
             transform.localScale = new Vector3 (1, 1, 1);
             facingRigth = true;
         }
     }
 
-    void StopPlayer(bool value)
+    // @desc stop the player movement
+    void StopPlayer()
     {
-        if (value){myRigidbody.velocity = new Vector2(0f, 0f);}
+        if (isCrouching){myRigidbody.velocity = new Vector2(0f, 0f);} //stop the player if he is crouching
     }
 
     // @desc get the movement input
     void OnMove(InputValue value)
     {
-        moveInput = value.Get<Vector2>();
+        moveInput = value.Get<Vector2>(); // get input
     }
 
     // @desc get the run input
     void OnRun(InputValue value) {
-        isRunning = value.Get<float>() > 0;
+        isRunning = value.isPressed;
     }
 
     // @desc get the crouch input
     void OnCrouch(InputValue value)
     {
-        isCrouching = value.Get<float>() > 0;
+        isCrouching = value.isPressed;
+        if(isGrounded){
+            standingCollider.enabled = !isCrouching;
+            myAnimator.SetBool("Crouch", isCrouching);
+        }
     }
 
     // @desc get the jump input
     void OnJump(InputValue value)
     {
-        isJumping = value.isPressed;
+        // allow jumps only when we made the first jump or when in "coyote jump time"
+        if(value.isPressed){
+            if(isGrounded) // if the player is grounded allow multiple jumps
+            {
+                multipleJumps = true; // only allow multiple jumps when we made the first jump
+                avaibleJumps--; 
+                myRigidbody.velocity = Vector2.up * jumpForce;
+                myAnimator.SetBool("Jump", true);
+            }
+            else if(coyoteJump) // if the player is in coyote jump time allow jumping and double jumping
+            {
+                multipleJumps = true; // only allow multiple jumps with we made the first jump
+                avaibleJumps--;
+                myRigidbody.velocity = Vector2.up * jumpForce;
+                myAnimator.SetBool("Jump", true);
+            }
+            else if (multipleJumps && avaibleJumps > 0) // jump if we can doublejump and have remaning jumps
+            {
+                avaibleJumps--;
+                myRigidbody.velocity = Vector2.up * jumpForce;
+                myAnimator.SetBool("Jump", true);
+            }
+        }
     }
 
-    void OnInteract(InputValue value)
-    {
-       isInteracting =  value.isPressed;
-    }
 }
