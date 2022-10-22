@@ -54,7 +54,6 @@ public class Fox : MonoBehaviour
         FlipSprite();
         StopPlayer();
         Movement();
-        myAnimator.SetFloat("yVelocity", myRigidbody.velocity.y);
     }
 
     void Movement(){
@@ -63,13 +62,14 @@ public class Fox : MonoBehaviour
 
         // check if the player has horizontal speed, and if true move the player
         Vector2 playerVelocity = new Vector2(moveInput.x * moveSpeed * Time.fixedDeltaTime * 100, myRigidbody.velocity.y);
-        myRigidbody.velocity = playerVelocity;     
+        myRigidbody.velocity = playerVelocity;  
 
-        // Animate the player: get player horizontal velocity for the Animator parameter
-        myAnimator.SetFloat("xVelocity", Mathf.Abs(myRigidbody.velocity.x));
+        // Animate the player
+        myAnimator.SetFloat("xVelocity", Mathf.Abs(myRigidbody.velocity.x));// get player horizontal velocity
+        myAnimator.SetFloat("yVelocity", myRigidbody.velocity.y);// get player vertical velocity
     }
 
-    // @desc check if the player is touching the ground... 
+    // @desc check if the player is touching the ground.........
     void GroundCheck()
     {
         bool wasGrounded = isGrounded; 
@@ -124,13 +124,13 @@ public class Fox : MonoBehaviour
     // @desc stop the player movement
     void StopPlayer()
     {
-        if (isCrouching){myRigidbody.velocity = new Vector2(0f, 0f);} //stop the player if he is crouching
+        if (isCrouching){myRigidbody.velocity = new Vector2(0f, 0f);}//stop the player if he is crouching
     }
 
     // @desc get the movement input
     void OnMove(InputValue value)
     {
-        moveInput = value.Get<Vector2>(); // get input
+        moveInput = value.Get<Vector2>();// get input
     }
 
     // @desc get the run input
@@ -153,21 +153,21 @@ public class Fox : MonoBehaviour
     {
         // allow jumps only when we made the first jump or when in "coyote jump time"
         if(value.isPressed){
-            if(isGrounded) // if the player is grounded allow multiple jumps
+            if(isGrounded)// if the player is grounded allow multiple jumps
             {
-                multipleJumps = true; // only allow multiple jumps when we made the first jump
+                multipleJumps = true;// only allow multiple jumps when we made the first jump
                 avaibleJumps--; 
                 myRigidbody.velocity = Vector2.up * jumpForce;
                 myAnimator.SetBool("Jump", true);
             }
-            else if(coyoteJump) // if the player is in coyote jump time allow jumping and double jumping
+            else if(coyoteJump)// if the player is in coyote jump time allow jumping and double jumping
             {
-                multipleJumps = true; // only allow multiple jumps with we made the first jump
+                multipleJumps = true;// only allow multiple jumps with we made the first jump
                 avaibleJumps--;
                 myRigidbody.velocity = Vector2.up * jumpForce;
                 myAnimator.SetBool("Jump", true);
             }
-            else if (multipleJumps && avaibleJumps > 0) // jump if we can doublejump and have remaning jumps
+            else if (multipleJumps && avaibleJumps > 0)// jump if we can doublejump and have remaning jumps
             {
                 avaibleJumps--;
                 myRigidbody.velocity = Vector2.up * jumpForce;
@@ -175,5 +175,4 @@ public class Fox : MonoBehaviour
             }
         }
     }
-
 }
