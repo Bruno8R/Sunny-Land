@@ -87,6 +87,7 @@ MonoBehaviour:
   runSpeed: 10
   walkSpeed: 5
   jumpForce: 20
+  coyoteJumpTime: 0.2
   totalJumps: 2
   avaibleJumps: 2
   isInteracting: 0
@@ -107,11 +108,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 152bd382a97a06d48874f1013352ae25, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fox: {fileID: 0}
   detectionPoint: {fileID: 606616810725081203}
   detectionLayer:
     serializedVersion: 2
     m_Bits: 512
+  detectedObject: {fileID: 0}
+  pickedItems: []
 --- !u!212 &606616810725081202
 SpriteRenderer:
   m_ObjectHideFlags: 0

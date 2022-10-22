@@ -9,6 +9,7 @@ public class InteractionSystem : MonoBehaviour
     private const float detectionRadius = 0.2f; // DetectionRadius
     public LayerMask detectionLayer; // Detection layer
     public GameObject detectedObject; // cached Trigger Object
+    public List<GameObject> pickedItems = new List<GameObject>(); // list of picked items
 
     // @desc get the interact input
     void OnInteract(InputValue value)
@@ -37,5 +38,10 @@ public class InteractionSystem : MonoBehaviour
             detected = true;
         }
         return detected;
+   }
+
+   public void PickUpItem(GameObject item)
+   {
+        pickedItems.Add(item);  
    }
 }
